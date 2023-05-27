@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import Swiper from 'swiper';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -47,7 +48,14 @@ export class LoginPage implements OnInit {
     },
   ];
 
-  constructor() { }
+  loginUser ={
+    email: 'prueba1@test.com',
+    password: '123456'
+  };
+
+  constructor(
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit() {
   }
@@ -57,7 +65,11 @@ export class LoginPage implements OnInit {
   }
 
   login(fLogin: NgForm){
-    console.log(fLogin.valid);
+    if(fLogin.invalid){
+      return;
+    }
+    this.usuarioService.login(this.loginUser.email, this.loginUser.password);    console.log(this.loginUser);
+
   }
 
   registro(fRegistro: NgForm){
