@@ -11,13 +11,32 @@ export class Tab1Page implements OnInit{
 
   posts: Post[] = [];
 
+  habilitado = false;
+
   constructor(
     private postsService: PostsService
   ) {}
 
   ngOnInit(): void {
-    this.postsService.getPosts().subscribe(resp=>{
+    this.sigueintes();
+  }
+
+  recargar(event: any){
+    this.posts = [];
+    this.habilitado = false;
+    this.sigueintes(event, true);
+  }
+
+  sigueintes(event?: any, pull: boolean = false){
+
+    this.postsService.getPosts(pull).subscribe(resp=>{
       this.posts.push(...resp.posts);
+      if(event){
+        event.target.complete();
+        if(resp.posts.length === 0){
+          this.habilitado = true;
+        }
+      }
     })
   }
 

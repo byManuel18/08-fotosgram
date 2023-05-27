@@ -17,7 +17,10 @@ export class PostsService {
     private http: HttpClient
   ) { }
 
-  getPosts():Observable<RespuestaPosts>{
+  getPosts(pull: boolean = false):Observable<RespuestaPosts>{
+    if(pull){
+      this.paginaPosts = 0;
+    }
     this.paginaPosts ++;
     return this.http.get<RespuestaPosts>(`${URL}/posts?pagina=${this.paginaPosts}`);
   }
