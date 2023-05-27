@@ -1,17 +1,14 @@
-<ion-header [translucent]="true">
+<ion-header no-border>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-icon slot="icon-only" name="bonfire"></ion-icon>
+    </ion-buttons>
     <ion-title>
-      Tab 1
+      FotosGram
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+<ion-content color="light">
+  <app-posts [posts]="posts"></app-posts>
 </ion-content>
