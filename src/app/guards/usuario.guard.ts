@@ -14,7 +14,7 @@ export class UsuarioGuard {
 
   }
 
-  canLoad(): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+  canActivate(): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     return this.usuarioService.validaToken();
   }
 

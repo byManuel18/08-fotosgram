@@ -5,6 +5,8 @@ import { UtilsService } from './utils.service';
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../interfaces/interfaces';
 import { NavController } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
+
 
 
 const URL = environment.url;
@@ -17,6 +19,8 @@ export class UsuarioService {
   private _storage: Storage | null = null;
   token: string | null = null;
   private usuario: Usuario = {};
+
+  $userSubs: BehaviorSubject<Usuario> = new BehaviorSubject<Usuario>({})
 
   constructor(
     private storage: Storage,
@@ -48,6 +52,14 @@ export class UsuarioService {
         }
       });
     })
+  }
+
+  logOut(){
+    this.token = null;
+    this.usuario = {};
+    this.$userSubs.next({...this.usuario});
+    this.storage.clear();
+    this.navCtr.navigateRoot('/login',{animated: true});
   }
 
   registro(usuario: Usuario): Promise<boolean>{
@@ -94,6 +106,7 @@ export class UsuarioService {
   async guardarToken(token: string){
     this.token = token;
     await this.storage.set('token',token);
+    // this.validaToken();
   }
 
   async loadToken(){
@@ -113,6 +126,7 @@ export class UsuarioService {
         this.http.get(`${URL}/user/`,{headers}).subscribe(async (resp: any)=>{
           if(resp['ok']){
             this.usuario = resp['usuario'];
+            this.$userSubs.next( resp['usuario']);
             await this.guardarToken(resp['token']);
             resolve(true);
           }else{

@@ -3,7 +3,7 @@ import { Usuario } from 'src/app/interfaces/interfaces';
 import { UsuarioService } from '../../services/usuario.service';
 import { NgForm } from '@angular/forms';
 import { UiService } from '../../services/ui.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tab3',
@@ -15,6 +15,7 @@ export class Tab3Page implements OnInit{
   usuario: Usuario = {}
 
   $avatarUser: BehaviorSubject<string> = new BehaviorSubject<string>('av-1.png');
+  $usuarioSubs!: Subscription;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -25,13 +26,21 @@ export class Tab3Page implements OnInit{
   }
 
   ionViewWillEnter(){
-    this.usuario = this.usuarioService.getUsuario();
-    this.$avatarUser.next(this.usuario.avatar || 'av-1.png');
+    this.$usuarioSubs = this.usuarioService.$userSubs.subscribe(user=>{
+      this.usuario = user;
+      this.$avatarUser.next(this.usuario.avatar || 'av-1.png');
+    })
+  }
+
+  ionViewWillLeave(){
+    if(this.$usuarioSubs){
+      this.$usuarioSubs.unsubscribe();
+    }
   }
 
 
   logout(){
-
+    this.usuarioService.logOut();
   }
 
   async actualizar(fActualizar: NgForm){

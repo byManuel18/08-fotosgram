@@ -44,6 +44,7 @@ export class Tab2Page {
         coords: null,
         posicion: false
       }
+      this.tempImages = [];
       this.route.navigateByUrl('/main/tabs/tab1');
     }
   }
@@ -70,7 +71,7 @@ export class Tab2Page {
   camara(){
     const options: ImageOptions ={
       quality: 60,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
       allowEditing: true,
     }
@@ -81,7 +82,7 @@ export class Tab2Page {
   galeria(){
     const options: ImageOptions ={
       quality: 60,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Photos,
       allowEditing: true,
     }
@@ -95,8 +96,8 @@ export class Tab2Page {
     Camera.getPhoto(options).then(dataImg=>{
       // const img = window.Ionic.WebView.convertFileSrc(dataImg);
       // console.log(img);
-      const srcLink = this.domSanitizer.bypassSecurityTrustResourceUrl(dataImg.webPath!)
-      this.postService.subirImagen(dataImg.dataUrl!);
+      const srcLink = this.domSanitizer.bypassSecurityTrustResourceUrl(dataImg.dataUrl!);
+      this.postService.subirImagen(dataImg.dataUrl!, dataImg.format);
       this.tempImages.push(srcLink);
     }).catch(err=>{
       console.log(err);

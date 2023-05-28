@@ -7,7 +7,7 @@ const routes: Routes = [
     path: 'main',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
     // canActivate: [UsuarioGuard]
-    canLoad: [UsuarioGuard]
+    canActivate: [UsuarioGuard]
   },
   {
     path: 'login',
@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login'
+    redirectTo: 'main/tabs/tab1'
   }
 ];
 @NgModule({

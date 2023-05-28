@@ -6,7 +6,6 @@ import { Observable, map } from 'rxjs';
 import { UsuarioService } from './usuario.service';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject} from '@awesome-cordova-plugins/file-transfer'
-
 const URL = environment.url;
 
 @Injectable({
@@ -55,9 +54,36 @@ export class PostsService {
     })
   }
 
-  subirImagen(img: string){
+  subirImagen(dataUrl: string, formato:string){
+
+    const archivo = this.dataURLtoFile(dataUrl,formato);
+    // const archivo = this.dataUrlToBlob(dataUrl);
+    const form = new FormData();
+    form.append('img', archivo);
+    const headers = new HttpHeaders({
+      'x-token': this.usuarioService.token!,
+    });
+
+    this.http.post(`${URL}/posts/upload`,form,{headers}).subscribe((data: any)=>{
+      console.log(data);
+    })
+  }
+
+  dataURLtoFile(dataurl:string , type: string) {
+    let arr = dataurl.split(','),
+        bstr = atob(arr[arr.length - 1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr],{type: `image/${type}`});
+    // return new File([u8arr], `photo.$`, {type: `image/${type}`});
+}
+
+  subirImagen1(img: string){
     const option: FileUploadOptions = {
-      fileKey: 'image',
+      fileKey: 'img',
       headers:{
         'x-token': this.usuarioService.token
       },
@@ -65,7 +91,7 @@ export class PostsService {
 
     const fileTransfer: FileTransferObject = FileTransfer.create();
 
-    fileTransfer.upload(img,`${URL}/posts/upload`,option).then(data=>{
+    fileTransfer.upload(img,`${URL}/posts/pload`,option,true).then(data=>{
       console.log(data);
     }).catch(err=>{
       console.log(err);

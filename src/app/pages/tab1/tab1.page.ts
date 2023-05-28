@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PostsService } from '../../services/posts.service';
 import { Post } from '../../interfaces/interfaces';
 
@@ -7,7 +7,7 @@ import { Post } from '../../interfaces/interfaces';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit{
+export class Tab1Page implements OnInit, OnDestroy{
 
   posts: Post[] = [];
 
@@ -16,6 +16,10 @@ export class Tab1Page implements OnInit{
   constructor(
     private postsService: PostsService
   ) {}
+
+  ngOnDestroy(): void {
+    this.postsService.paginaPosts = 0;
+  }
 
   ngOnInit(): void {
     this.sigueintes();

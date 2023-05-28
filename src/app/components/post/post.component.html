@@ -9,23 +9,15 @@
     </ion-label>
   </ion-item>
 
-  <!-- <swiper-container  pagination="true">
-    <swiper-slide class="image-slide"
-      [style]="img1 | domSanitizer"
-    >
-    </swiper-slide>
-    <swiper-slide class="image-slide"
-      [style]="img2 | domSanitizer"
-    >
-    </swiper-slide>
-    <swiper-slide class="image-slide"
-      [style]="img3 | domSanitizer"
+  <swiper-container  pagination="true" *ngIf="post.imgs && post.imgs.length > 0" [allowTouchMove]="post.imgs.length > 1">
+    <swiper-slide class="image-slide" *ngFor="let img of post.imgs"
+      [style]="(img | imagen:post.usuario!._id!) | domSanitizer"
     >
     </swiper-slide>
 
-  </swiper-container> -->
+  </swiper-container>
 
-  <!-- <app-mapa *ngIf="post.coords" [coords]="post.coords"></app-mapa> -->
+  <app-mapa *ngIf="post.coords" [coords]="post.coords"></app-mapa>
 
   <ion-item lines="none">
     <ion-icon slot="start" name="heart-outline"></ion-icon>
