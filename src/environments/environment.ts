@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'http://localhost:3000',
+  url: ' http://192.168.1.154:3000',
   publicKey: `-----BEGIN PUBLIC KEY-----
   MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSA0mRzIXL4li7PhT/N3MyCgxh
   HOwCN6yCTl9OgJSClo7J71CGcSdm1ez4/oIrcovRtFvlTEZGuZwsTpIYfEl+Sh9B

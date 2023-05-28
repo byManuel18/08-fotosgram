@@ -5,6 +5,8 @@ import { Post, RespuestaPosts } from '../interfaces/interfaces';
 import { Observable, map } from 'rxjs';
 import { UsuarioService } from './usuario.service';
 
+import { FileTransfer, FileUploadOptions, FileTransferObject} from '@awesome-cordova-plugins/file-transfer'
+
 const URL = environment.url;
 
 @Injectable({
@@ -50,6 +52,23 @@ export class PostsService {
           resolve(false);
         }
       })
+    })
+  }
+
+  subirImagen(img: string){
+    const option: FileUploadOptions = {
+      fileKey: 'image',
+      headers:{
+        'x-token': this.usuarioService.token
+      },
+    }
+
+    const fileTransfer: FileTransferObject = FileTransfer.create();
+
+    fileTransfer.upload(img,`${URL}/posts/upload`,option).then(data=>{
+      console.log(data);
+    }).catch(err=>{
+      console.log(err);
     })
   }
 }

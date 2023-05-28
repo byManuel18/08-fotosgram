@@ -3,6 +3,11 @@ import { PostsService } from '../../services/posts.service';
 import { Router } from '@angular/router';
 
 import { Geolocation } from '@capacitor/geolocation';
+import { Camera, CameraResultType, CameraSource, ImageOptions } from '@capacitor/camera';
+import { DomSanitizer } from '@angular/platform-browser';
+
+declare var window: any;
+
 
 @Component({
   selector: 'app-tab2',
@@ -11,7 +16,7 @@ import { Geolocation } from '@capacitor/geolocation';
 })
 export class Tab2Page {
 
-  tempImages = [];
+  tempImages:  any[]=[];
 
   post:{
     mensaje: string,
@@ -27,7 +32,8 @@ export class Tab2Page {
 
   constructor(
     private postService: PostsService,
-    private route: Router
+    private route: Router,
+    private domSanitizer: DomSanitizer
   ) {}
 
   async crearPost(){
@@ -59,6 +65,42 @@ export class Tab2Page {
       this.cargandoGeo = false;
     });
 
+  }
+
+  camara(){
+    const options: ImageOptions ={
+      quality: 60,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      allowEditing: true,
+    }
+    this.loadPhoto(options);
+
+  }
+
+  galeria(){
+    const options: ImageOptions ={
+      quality: 60,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
+      allowEditing: true,
+    }
+
+    this.loadPhoto(options);
+
+  }
+
+
+  loadPhoto(options: ImageOptions){
+    Camera.getPhoto(options).then(dataImg=>{
+      // const img = window.Ionic.WebView.convertFileSrc(dataImg);
+      // console.log(img);
+      const srcLink = this.domSanitizer.bypassSecurityTrustResourceUrl(dataImg.webPath!)
+      this.postService.subirImagen(dataImg.dataUrl!);
+      this.tempImages.push(srcLink);
+    }).catch(err=>{
+      console.log(err);
+    })
   }
 
 }
