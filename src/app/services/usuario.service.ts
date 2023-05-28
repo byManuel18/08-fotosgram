@@ -16,7 +16,7 @@ export class UsuarioService {
 
   private _storage: Storage | null = null;
   token: string | null = null;
-  usuario: Usuario = {};
+  private usuario: Usuario = {};
 
   constructor(
     private storage: Storage,
@@ -64,6 +64,31 @@ export class UsuarioService {
         }
       })
     });
+  }
+
+  actualizarUsuario(usuario: Usuario): Promise<boolean>{
+    const headers = new HttpHeaders({
+      'x-token' : this.token!
+    });
+    return new Promise<boolean>((resolve)=>{
+
+      this.http.post(`${URL}/user/update`,usuario,{headers}).subscribe(async (resp : any)=>{
+        if(resp['ok']){
+          await this.guardarToken(resp['token']);
+          this.usuario = {...usuario};
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    })
+  }
+
+  getUsuario(){
+    // if(!this.usuario._id){
+    //   this.validaToken();
+    // }
+    return {...this.usuario};
   }
 
   async guardarToken(token: string){

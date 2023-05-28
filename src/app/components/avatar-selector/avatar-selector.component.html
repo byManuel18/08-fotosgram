@@ -6,7 +6,7 @@
 
   <ion-row>
   <ion-col>
-      <swiper-container [slidesPerView]="3.5" >
+      <swiper-container [slidesPerView]="3.5" #swiperAvatar (afterinit)="swiperReady()">
       <swiper-slide *ngFor="let avatar of avatars">
           <ion-img class="pick-avatar"
                   src="/assets/avatars/{{avatar.img}}"

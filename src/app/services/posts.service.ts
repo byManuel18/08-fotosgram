@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { RespuestaPosts } from '../interfaces/interfaces';
-import { Observable } from 'rxjs';
+import { Post, RespuestaPosts } from '../interfaces/interfaces';
+import { Observable, map } from 'rxjs';
+import { UsuarioService } from './usuario.service';
 
 const URL = environment.url;
 
@@ -13,8 +14,11 @@ export class PostsService {
 
   paginaPosts: number = 0;
 
+  nuevoPost = new EventEmitter<Post>()
+
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private usuarioService: UsuarioService
   ) { }
 
   getPosts(pull: boolean = false):Observable<RespuestaPosts>{
@@ -23,5 +27,29 @@ export class PostsService {
     }
     this.paginaPosts ++;
     return this.http.get<RespuestaPosts>(`${URL}/posts?pagina=${this.paginaPosts}`);
+  }
+
+  crearPost(post : any): Promise<boolean>{
+    const headers = new HttpHeaders({
+      'x-token': this.usuarioService.token!
+    });
+
+    return new Promise<boolean> ((resolve)=>{
+      this.http.post(`${URL}/posts`,post,{headers}).pipe(
+       map((resp : any)=>{
+        if(resp['ok']){
+          resp.post.usuario = this.usuarioService.getUsuario();
+        }
+        return resp;
+       })
+      ).subscribe((resp: any)=>{
+        if(resp['ok']){
+          this.nuevoPost.emit(resp.post);
+          resolve(true);
+        }else{
+          resolve(false);
+        }
+      })
+    })
   }
 }

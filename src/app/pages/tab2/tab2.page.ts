@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { PostsService } from '../../services/posts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +9,29 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  tempImages = [];
+
+  post = {
+    mensaje: '',
+    coords: null,
+    posicion: false
+  }
+
+  constructor(
+    private postService: PostsService,
+    private route: Router
+  ) {}
+
+  async crearPost(){
+    const creado = await this.postService.crearPost(this.post);
+    if(creado){
+      this.post = {
+        mensaje: '',
+        coords: null,
+        posicion: false
+      }
+      this.route.navigateByUrl('/main/tabs/tab1');
+    }
+  }
 
 }
