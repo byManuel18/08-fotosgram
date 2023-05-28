@@ -9,7 +9,7 @@
     </ion-label>
   </ion-item>
 
-  <swiper-container  pagination="true">
+  <!-- <swiper-container  pagination="true">
     <swiper-slide class="image-slide"
       [style]="img1 | domSanitizer"
     >
@@ -23,7 +23,9 @@
     >
     </swiper-slide>
 
-  </swiper-container>
+  </swiper-container> -->
+
+  <app-mapa *ngIf="post.coords" [coords]="post.coords"></app-mapa>
 
   <ion-item lines="none">
     <ion-icon slot="start" name="heart-outline"></ion-icon>
