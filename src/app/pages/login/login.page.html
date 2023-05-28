@@ -60,26 +60,7 @@
 
 
       <ion-grid fixed>
-
-            <ion-row>
-            <ion-col>
-                <h3>Seleccione Avatar</h3>
-            </ion-col>
-            </ion-row>
-
-            <ion-row>
-            <ion-col>
-                <swiper-container [slidesPerView]="3.5" >
-                <swiper-slide *ngFor="let avatar of avatars">
-                    <ion-img class="pick-avatar"
-                            src="/assets/avatars/{{avatar.img}}"
-                            [ngClass]="{'pick-avatar-seleccionado': avatar.seleccionado}"
-                            (click)="seleccionarAvatar(avatar)"
-                            ></ion-img>
-                </swiper-slide>
-                </swiper-container >
-            </ion-col>
-            </ion-row>
+            <app-avatar-selector (avatarSelec)="seleccionarAvatar($event)"></app-avatar-selector>
 
             <form (ngSubmit)="registro(fRegistro)" #fRegistro="ngForm">
                 <ion-row>
@@ -91,6 +72,7 @@
                             <ion-label>Email</ion-label>
                             <ion-input name="email"
                                         type="email"
+                                        [(ngModel)]="rgisterUser.email"
                                         required></ion-input>
                             </ion-item>
 
@@ -98,6 +80,7 @@
                             <ion-label>Nombre</ion-label>
                             <ion-input name="nombre"
                                         type="text"
+                                        [(ngModel)]="rgisterUser.nombre"
                                         required></ion-input>
                             </ion-item>
 
@@ -105,6 +88,7 @@
                             <ion-label>Password</ion-label>
                             <ion-input name="password"
                                         type="password"
+                                        [(ngModel)]="rgisterUser.password"
                                         required></ion-input>
                             </ion-item>
 

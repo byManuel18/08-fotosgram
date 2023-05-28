@@ -4,13 +4,15 @@ import { IonicModule } from '@ionic/angular';
 import { PostComponent } from './post/post.component';
 import { PostsComponent } from './posts/posts.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { AvatarSelectorComponent } from './avatar-selector/avatar-selector.component';
 
 
 
 @NgModule({
   declarations: [
     PostComponent,
-    PostsComponent
+    PostsComponent,
+    AvatarSelectorComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { PipesModule } from '../pipes/pipes.module';
     PipesModule
   ],
   exports:[
-    PostsComponent
+    PostsComponent,
+    AvatarSelectorComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
